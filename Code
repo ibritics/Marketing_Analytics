@@ -1,0 +1,55 @@
+#Setting up libraries
+df =read.csv("test_msa_bb.csv")
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(sqldf)
+
+#Droping the NA columns
+head(df)
+glimpse(df)
+df %>% is.na() %>% nrow()     #How many rows has an NA
+df %>% is.na() %>% ncol()     #In all columns we have at NA
+
+#Dropped totally absent NA columns.
+#ifelse(df$ %>% is.na() %>% sum()/nrow(df)>0.7,df$age <- NULL,print("the column is ok")) #If the null values make 70% of the dataset we drop them. 
+
+df = df %>%  select(-c(gender,state,age,birthday_year,age)) #They have all the ratio of 1.
+
+#Summary
+summary(df)
+
+df['email']  %>%  unique() %>% count() #What is the number of the unique customers.
+df['email']  %>%  unique() %>% count()/nrow(df) #What is the percentage of the customers which made the total conversions.
+
+df %>% group_by(conversion_name) %>% 
+  summarize(n=n()) %>% 
+  arrange(desc(n))
+
+ggplot(df, aes(conversion_name),fill="steelblue")+
+  geom_bar()
+
+ggplot(df, aes(country, fill=country))+
+  geom_bar()+scale_y_log10()+
+  guides(x =  guide_axis(angle = 90))
+  
+#Setting the cconverstion date as a date varibale.
+df$conversion_date = as.Date(df$conversion_date, "%Y-%m-%d")
+#Selecting the least value of the date
+df$days_since = round(as.numeric(difftime(time1 = "2019-01-01",time2 =df$conversion_date,units = "days")),0) 
+df$days_since = abs(df$days_since)
+head(df)
+summary(df)
+
+customers = sqldf("SELECT email,
+                          MIN(days_since) AS 'recency',
+                          COUNT(*) AS 'frequency',
+                          AVG(conversion_value) AS 
+                          'conversion_value',
+                          AVG(conversion_value_margin) AS    'conversion_value_margin'
+                   FROM df GROUP BY 1")
+head(customers)
+summary(customers)
+
+#Exporting the dataset
+write.csv(customers, "customers.csv",row.names=FALSE)
