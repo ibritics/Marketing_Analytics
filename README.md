@@ -1,5 +1,5 @@
-# Marketing Analitics 
-## What I'm happiest with this dataset is tha. I have for the first time have gone beyond my limits. I have done the general data exploration and RFM in a couple of hours. <b /> 
+# Marketing Analytics 
+## This project is one of my first projects. I have done the EDA ANALYSIS and RFM in a couple of hours. <b /> 
 **We are given the dataset composed by 300.000 observations and need to find out the Recency Fequency and Monetary analysis for this dataset**<b /> <b /> 
 
 ![image](https://user-images.githubusercontent.com/90762709/133905592-c0d3cb4b-0fd8-4dce-986c-5f24bac4de99.png) <b />
